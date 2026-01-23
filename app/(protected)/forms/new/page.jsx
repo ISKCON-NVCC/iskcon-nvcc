@@ -12,7 +12,7 @@ const Icons = {
   ),
   Sparkles: () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z" />
     </svg>
   ),
   Plus: () => (
@@ -59,23 +59,23 @@ const CreateFormPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFBF9] p-8 font-sans text-stone-800">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#FDFBF9] p-4 md:p-8 font-sans text-stone-800">
+      <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
         
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-serif font-bold text-stone-900">Create Form</h1>
-            <p className="text-stone-500 mt-1">Build your form with custom questions</p>
+            <h1 className="text-2xl md:text-3xl font-serif font-bold text-stone-900">Create Form</h1>
+            <p className="text-stone-500 mt-1 text-sm md:text-base">Build your form with custom questions</p>
           </div>
-          <button className="flex items-center gap-2 bg-[#EE7D22] hover:bg-[#d66e1d] text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm">
+          <button className="flex items-center justify-center gap-2 bg-[#EE7D22] hover:bg-[#d66e1d] text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm w-full md:w-auto">
             <Icons.Save />
             Save Form
           </button>
         </div>
 
         {/* Form Details Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-stone-100 p-6 space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-stone-100 p-4 md:p-6 space-y-6">
           <h2 className="text-xl font-serif font-bold text-stone-800">Form Details</h2>
           
           <div className="space-y-4">
@@ -118,7 +118,7 @@ const CreateFormPage = () => {
         </div>
 
         {/* AI Suggestions Card */}
-        <div className="bg-[#FFF8F3] rounded-xl border border-[#FCDCC3] p-6">
+        <div className="bg-[#FFF8F3] rounded-xl border border-[#FCDCC3] p-4 md:p-6">
           <div className="flex items-center gap-2 mb-2">
             <div className="text-[#EE7D22]">
               <Icons.Sparkles />
@@ -127,43 +127,43 @@ const CreateFormPage = () => {
           </div>
           <p className="text-[#8C6B55] text-sm mb-4">Enter a topic to get AI-generated question ideas</p>
           
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <input 
               type="text" 
               placeholder="e.g., Bhagavad Gita basics, Volunteer rules..."
               value={aiTopic}
               onChange={(e) => setAiTopic(e.target.value)}
-              className="flex-1 px-4 py-3 bg-white border border-[#FCDCC3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE7D22]/20 focus:border-[#EE7D22] placeholder:text-[#BCAAA0]"
+              className="w-full md:flex-1 px-4 py-3 bg-white border border-[#FCDCC3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE7D22]/20 focus:border-[#EE7D22] placeholder:text-[#BCAAA0]"
             />
-            <button className="bg-[#EE7D22] hover:bg-[#d66e1d] text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm">
+            <button className="bg-[#EE7D22] hover:bg-[#d66e1d] text-white px-6 py-3 md:py-2 rounded-lg font-medium transition-colors shadow-sm w-full md:w-auto">
               Generate
             </button>
           </div>
         </div>
 
         {/* Questions Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-stone-100 p-8 min-h-[300px]">
-          <div className="space-y-1 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-stone-100 p-4 md:p-8 min-h-[300px]">
+          <div className="space-y-1 mb-6 md:mb-8">
              <h2 className="text-xl font-serif font-bold text-stone-800">Questions</h2>
              <p className="text-stone-500 text-sm">Add and configure your form questions</p>
           </div>
 
-          <div className="flex gap-3 mb-8">
+          <div className="flex flex-wrap gap-3 mb-8">
             <button 
               onClick={() => addQuestion('text')}
-              className="flex items-center gap-2 px-4 py-2 border border-stone-200 rounded-lg hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors bg-white shadow-sm"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-stone-200 rounded-lg hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors bg-white shadow-sm flex-1 md:flex-none"
             >
               <Icons.Plus /> Text
             </button>
             <button 
               onClick={() => addQuestion('number')}
-              className="flex items-center gap-2 px-4 py-2 border border-stone-200 rounded-lg hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors bg-white shadow-sm"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-stone-200 rounded-lg hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors bg-white shadow-sm flex-1 md:flex-none"
             >
               <Icons.Plus /> Number
             </button>
             <button 
               onClick={() => addQuestion('multiple_choice')}
-              className="flex items-center gap-2 px-4 py-2 border border-stone-200 rounded-lg hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors bg-white shadow-sm"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-stone-200 rounded-lg hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors bg-white shadow-sm w-full md:w-auto"
             >
               <Icons.Plus /> Multiple Choice
             </button>

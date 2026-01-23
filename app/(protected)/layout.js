@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import Navbar from "../../components/navbar";
 
 export default async function ProtectedLayout({ children }) {
   const cookieStore = await cookies();
@@ -15,5 +16,12 @@ export default async function ProtectedLayout({ children }) {
     redirect("/login");
   }
 
-  return children;
+  return (
+    <div className="min-h-screen bg-[#FDFBF9]">
+      <Navbar />
+      <main>
+        {children}
+      </main>
+    </div>
+  );
 }
