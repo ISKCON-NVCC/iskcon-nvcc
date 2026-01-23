@@ -61,20 +61,24 @@ const QuestionCard = ({ question, index, onUpdate, onDelete }) => {
   const getOptionLabel = (i) => String.fromCharCode(65 + i)
 
   return (
-    <div className="border border-stone-100 rounded-lg p-5 bg-[#FCFBF9] hover:border-[#FCDCC3] transition-colors group">
+    <div className="border border-stone-100 rounded-lg p-4 md:p-5 bg-[#FCFBF9] hover:border-[#FCDCC3] transition-colors group">
       {/* Header Row */}
-      <div className="flex items-center gap-4 mb-4">
-        <div className="cursor-grab text-stone-300 hover:text-stone-500">
-          <Icons.GripVertical />
+      <div className="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 mb-4">
+        
+        {/* Drag Handle & Number */}
+        <div className="flex items-center gap-3">
+            <div className="cursor-grab text-stone-300 hover:text-stone-500">
+            <Icons.GripVertical />
+            </div>
+            <span className="text-stone-400 font-medium font-serif min-w-[30px]"># {index + 1}</span>
         </div>
         
-        <span className="text-stone-400 font-medium font-serif min-w-[30px]"># {index + 1}</span>
-        
-        <div className="relative">
+        {/* Type Selector */}
+        <div className="relative flex-1 md:flex-none min-w-[140px]">
           <select 
             value={question.type}
             onChange={(e) => onUpdate(question.id, { type: e.target.value })}
-            className="appearance-none bg-white border border-stone-200 rounded-md py-1.5 pl-3 pr-8 text-sm font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-[#EE7D22] focus:border-[#EE7D22]"
+            className="w-full appearance-none bg-white border border-stone-200 rounded-md py-1.5 pl-3 pr-8 text-sm font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-[#EE7D22] focus:border-[#EE7D22]"
           >
             <option value="text">Text</option>
             <option value="number">Number</option>
@@ -85,9 +89,10 @@ const QuestionCard = ({ question, index, onUpdate, onDelete }) => {
           </div>
         </div>
 
-        <div className="flex-1" />
+        <div className="hidden md:block flex-1" />
 
-        <div className="flex items-center gap-3 border-l border-stone-200 pl-4">
+        {/* Actions (Required + Delete) */}
+        <div className="flex items-center gap-3 border-l border-stone-200 pl-4 ml-auto md:ml-0">
           <div className="flex items-center gap-2">
              <button 
                 onClick={() => onUpdate(question.id, { required: !question.required })}
@@ -95,7 +100,7 @@ const QuestionCard = ({ question, index, onUpdate, onDelete }) => {
               >
                 <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition duration-200 ease-in-out ${question.required ? 'translate-x-5' : 'translate-x-0.5'}`} />
               </button>
-              <span className="text-xs font-medium text-stone-600">Required</span>
+              <span className="text-xs font-medium text-stone-600 hidden sm:inline">Required</span>
           </div>
           
           <button 
@@ -107,7 +112,7 @@ const QuestionCard = ({ question, index, onUpdate, onDelete }) => {
         </div>
       </div>
 
-      <div className="pl-12 space-y-4">
+      <div className="pl-0 md:pl-12 space-y-4">
         <input 
           type="text" 
           value={question.label}
