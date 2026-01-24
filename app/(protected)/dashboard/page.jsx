@@ -4,7 +4,6 @@ import { LuUsers } from "react-icons/lu";
 import { CiSquareCheck } from "react-icons/ci";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
-//TODO: UPDATE THE VREATE NEW FORM AND VIEW ALL FORMS BUTTONS
 
 export default function DashboardPage() {
   return (
