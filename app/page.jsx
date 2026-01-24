@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
-import Footer from "../components/footer";
+import { useRouter } from "next/navigation";  
+
 
 const page = () => {
+  const router = useRouter();
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#FDF6EE] to-[#FFF9F4] text-[#3A2E2A]">
+    <main className="min-h-screen bg-linear-to-b from-[#FDF6EE] to-[#FFF9F4] text-[#3A2E2A]">
 
       {/* ================= HERO ================= */}
       <section className="flex flex-col items-center text-center px-6 pt-24 pb-28">
@@ -16,30 +18,30 @@ const page = () => {
         
         {/* Title */}
         <h1
-          className="font-[var(--font-playfair)] text-[40px] leading-[48px]"
-          style={{ fontWeight: 600 }}
+          className="text-5xl md:text-6xl lg:text-7xl leading-tight text-[#3A2E2A]"
+          style={{ fontWeight: 700 }}
         >
           ISKCON NVCC
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-2 text-[#F7931E] text-[15px] leading-[20px] font-medium">
+        <p className="mt-4 text-[#F7931E] text-xl md:text-2xl font-medium tracking-wide">
           Form Management System
         </p>
 
         {/* Description */}
-        <p className="mt-6 max-w-[720px] text-[14px] leading-[24px] text-[#6B5A55]">
+        <p className="mt-6 max-w-[800px] text-lg md:text-xl leading-relaxed text-[#6B5A55]">
           Streamline event registrations, volunteer onboarding,
           and spiritual assessments — all in one peaceful, organized platform.
         </p>
 
         {/* Buttons */}
         <div className="mt-10 flex gap-4">
-          <button className="flex items-center gap-2 bg-[#F7931E] text-white px-6 py-[10px] rounded-lg text-[14px] font-medium shadow hover:brightness-105 transition">
+          <button onClick={() => {router.push('/login')}} className="flex items-center gap-2 bg-[#F7931E] text-white px-8 py-3 rounded-xl text-base md:text-lg font-medium shadow hover:brightness-105 transition">
             👤 Admin Login
           </button>
 
-          <button className="flex items-center gap-2 bg-white border border-[#EADFD5] text-[#3A2E2A] px-6 py-[10px] rounded-lg text-[14px] font-medium shadow-sm hover:bg-[#FFF3E8] transition">
+          <button onClick={() => {router.push('/forms')}} className="flex items-center gap-2 bg-white border border-[#EADFD5] text-[#3A2E2A] px-8 py-3 rounded-xl text-base md:text-lg font-medium shadow-sm hover:bg-[#FFF3E8] transition">
             📄 View Public Forms
           </button>
         </div>
@@ -49,7 +51,7 @@ const page = () => {
       <section className="bg-[#FFF9F4] py-24 px-6">
 
         <h2
-          className="text-center font-[var(--font-playfair)] text-[30px] leading-[38px] font-semibold mb-14"
+          className="text-center text-4xl md:text-5xl font-bold mb-16 text-[#3A2E2A]"
         >
           Everything You Need
         </h2>
@@ -76,7 +78,7 @@ const page = () => {
 
         </div>
       </section>
-      <Footer />
+      
 
       
 
@@ -86,16 +88,16 @@ const page = () => {
 
 const FeatureCard = ({ icon, title, desc }) => {
   return (
-    <div className="bg-white rounded-2xl p-6 text-center shadow-sm border border-[#F0E2D6] hover:shadow-md transition">
-      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#FFF1E4] flex items-center justify-center text-xl">
+    <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-[#F0E2D6] hover:shadow-md transition">
+      <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#FFF1E4] flex items-center justify-center text-3xl">
         {icon}
       </div>
 
-      <h3 className="font-semibold mb-2 text-[16px]">
+      <h3 className="font-bold mb-3 text-2xl text-[#3A2E2A]">
         {title}
       </h3>
 
-      <p className="text-[14px] leading-[22px] text-[#6B5A55]">
+      <p className="text-base md:text-lg leading-relaxed text-[#6B5A55]">
         {desc}
       </p>
     </div>
