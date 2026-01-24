@@ -88,7 +88,7 @@ export default function LoginPage() {
     {/* Sign up */}
     <p className="text-center text-xs text-[#444] mt-6">
       Don’t have an account?{" "}
-      <span className="text-blue-600 font-medium cursor-pointer">
+      <span onClick={() => router.push("/signup")} className="text-blue-600 font-medium cursor-pointer">
         Sign up
       </span>
     </p>
