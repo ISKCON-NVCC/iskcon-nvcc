@@ -1,14 +1,14 @@
-import Navbar from "@/components/navbar";
+"use client"
 import { SiGoogleforms } from "react-icons/si";
 import { LuUsers } from "react-icons/lu";
 import { CiSquareCheck } from "react-icons/ci";
 import { IoMdAddCircleOutline } from "react-icons/io";
-
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-[#FFF7EF]">
-      <Navbar />
 
       <main className="px-8 py-6">
         {/* Greeting */}
@@ -70,12 +70,12 @@ export default function DashboardPage() {
               Common tasks at your fingertips
             </p>
 
-            <button className="w-full bg-[#F58220] text-white py-3 px-4 rounded-lg mb-3 flex items-center justify-start gap-2">
+            <button onClick={() => navigate("/forms/new")} className="cursor-pointer w-full bg-[#F58220] text-white py-3 px-4 rounded-lg mb-3 flex items-center justify-start gap-2">
               <IoMdAddCircleOutline />
               Create New Form
             </button>
 
-            <button className="w-full border border-[#F2E6D8] py-3 px-4 rounded-lg text-[#4A2E1F] flex items-center justify-start gap-2 hover:bg-[#FFF1E3] hover:text-[#F58220] transition-colors duration-200">
+            <button onClick={() => navigate("/forms")} className="cursor-pointer w-full border border-[#F2E6D8] py-3 px-4 rounded-lg text-[#4A2E1F] flex items-center justify-start gap-2 hover:bg-[#FFF1E3] hover:text-[#F58220] transition-colors duration-200">
               <SiGoogleforms />
               View All Forms
             </button>
