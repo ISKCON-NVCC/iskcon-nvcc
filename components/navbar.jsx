@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'All Forms', href: '/forms' },
+    { name: 'All Forms', href: '/admin/allforms' },
     { name: 'Create Form', href: '/forms/new' },
   ];
 

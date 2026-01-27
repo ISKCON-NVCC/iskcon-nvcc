@@ -1,12 +1,46 @@
-"use client"
+
 import { SiGoogleforms } from "react-icons/si";
 import { LuUsers } from "react-icons/lu";
 import { CiSquareCheck } from "react-icons/ci";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 
-export default function DashboardPage() {
-  const router = useRouter();
+export default async function DashboardPage() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return <div>Please log in to view dashboard.</div>;
+  }
+
+  // Fetch metrics
+  // 1. Total Forms
+  const { count: formsCount } = await supabase
+    .from('forms')
+    .select('*', { count: 'exact', head: true })
+
+  // 2. Total Quizzes
+  const { count: quizzesCount } = await supabase
+    .from('forms')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_quiz', true);
+
+  // 3. Total Responses (RLS filters for own forms)
+  const { count: responsesCount } = await supabase
+    .from('responses')
+    .select('*', { count: 'exact', head: true });
+
+  // 4. Recent Responses
+  const { data: recentResponses } = await supabase
+    .from('responses')
+    .select('*, forms!inner(title)')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
   return (
     <div className="min-h-screen bg-[#FFF7EF]">
 
@@ -27,7 +61,7 @@ export default function DashboardPage() {
               <SiGoogleforms className="text-[#9A7A6A] group-hover:text-[#F58220]" />
             </div>
             <h2 className="text-3xl font-bold text-[#4A2E1F] mt-2 group-hover:text-[#F58220]">
-              3
+              {formsCount || 0}
             </h2>
             <p className="text-xs text-[#9A7A6A] mt-1">Active forms</p>
           </div>
@@ -38,7 +72,7 @@ export default function DashboardPage() {
               <LuUsers className="text-[#9A7A6A] group-hover:text-[#F58220]" />
             </div>
             <h2 className="text-3xl font-bold text-[#4A2E1F] mt-2 group-hover:text-[#F58220]">
-              5
+              {responsesCount || 0}
             </h2>
             <p className="text-xs text-[#9A7A6A] mt-1">
               Submissions received
@@ -51,7 +85,7 @@ export default function DashboardPage() {
               <CiSquareCheck className="text-[#9A7A6A] group-hover:text-[#F58220]" />
             </div>
             <h2 className="text-3xl font-bold text-[#4A2E1F] mt-2 group-hover:text-[#F58220]">
-              1
+              {quizzesCount || 0}
             </h2>
             <p className="text-xs text-[#9A7A6A] mt-1">
               Assesement Forms
@@ -70,15 +104,19 @@ export default function DashboardPage() {
               Common tasks at your fingertips
             </p>
 
-            <button onClick={() => router.push("/forms/new")} className="cursor-pointer w-full bg-[#F58220] text-white py-3 px-4 rounded-lg mb-3 flex items-center justify-start gap-2">
-              <IoMdAddCircleOutline />
-              Create New Form
-            </button>
+            <Link href="/forms/new">
+                <button className="cursor-pointer w-full bg-[#F58220] text-white py-3 px-4 rounded-lg mb-3 flex items-center justify-start gap-2">
+                <IoMdAddCircleOutline />
+                Create New Form
+                </button>
+            </Link>
 
-            <button onClick={() => router.push("/forms")} className="cursor-pointer w-full border border-[#F2E6D8] py-3 px-4 rounded-lg text-[#4A2E1F] flex items-center justify-start gap-2 hover:bg-[#FFF1E3] hover:text-[#F58220] transition-colors duration-200">
-              <SiGoogleforms />
-              View All Forms
-            </button>
+            <Link href="/admin/allforms">
+                <button className="cursor-pointer w-full border border-[#F2E6D8] py-3 px-4 rounded-lg text-[#4A2E1F] flex items-center justify-start gap-2 hover:bg-[#FFF1E3] hover:text-[#F58220] transition-colors duration-200">
+                <SiGoogleforms />
+                View All Forms
+                </button>
+            </Link>
           </div>
 
           {/* Recent Responses */}
@@ -91,32 +129,24 @@ export default function DashboardPage() {
             </p>
 
             <ul className="space-y-4 text-sm">
-              <li className="flex justify-between items-center">
-                <div>
-                  <p className="text-[#4A2E1F]">
-                    Bhagavad Gita Basics Quiz
-                  </p>
-                  <span className="text-[#9A7A6A]">21/01/2024</span>
-                </div>
+                {recentResponses?.map((response) => (
+                    <li key={response.id} className="flex justify-between items-center bg-[#FAFAFA] p-3 rounded-lg">
+                        <div>
+                            <p className="text-[#4A2E1F] font-medium">
+                                {response.forms?.title || 'Untitled Form'}
+                            </p>
+                            <span className="text-[#9A7A6A] text-xs">
+                                {new Date(response.created_at).toLocaleDateString()} at {new Date(response.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                        </div>
+                    </li>
+                ))}
 
-                <span className="bg-[#E6F4EA] text-[#2E7D32] text-xs font-medium px-3 py-1 rounded-full">
-                  Score: 1/3
-                </span>
-              </li>
-
-              <li>
-                <p className="text-[#4A2E1F]">
-                  Sunday Feast Registration
-                </p>
-                <span className="text-[#9A7A6A]">17/01/2024</span>
-              </li>
-
-              <li>
-                <p className="text-[#4A2E1F]">
-                  Sunday Feast Registration
-                </p>
-                <span className="text-[#9A7A6A]">16/01/2024</span>
-              </li>
+                {(!recentResponses || recentResponses.length === 0) && (
+                    <li className="text-center text-stone-400 py-4">
+                        No responses yet.
+                    </li>
+                )}
             </ul>
           </div>
         </div>
