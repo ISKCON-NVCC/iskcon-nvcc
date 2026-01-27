@@ -2,8 +2,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -14,6 +17,11 @@ export default function Navbar() {
   ];
 
   const isActive = (path) => pathname === path;
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   return (
     <nav className="w-full bg-[#FFF7EF] border-b border-[#F2E6D8] relative z-50">
@@ -60,7 +68,7 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <button className="text-red-500 hover:text-red-600 transition-colors font-medium">Logout</button>
+          <button onClick={handleLogout} className="text-red-500 hover:text-red-600 transition-colors font-medium">Logout</button>
         </div>
       </div>
 
@@ -81,7 +89,7 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <button className="text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+          <button onClick={handleLogout} className="text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
             Logout
           </button>
         </div>
