@@ -1,11 +1,23 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/logout');
+      router.push('/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -60,7 +72,12 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <button className="text-red-500 hover:text-red-600 transition-colors font-medium">Logout</button>
+          <button 
+            onClick={handleLogout}
+            className="text-red-500 hover:text-red-600 transition-colors font-medium"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
@@ -81,7 +98,10 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <button className="text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors">
+          <button 
+            onClick={handleLogout}
+            className="text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors"
+          >
             Logout
           </button>
         </div>
