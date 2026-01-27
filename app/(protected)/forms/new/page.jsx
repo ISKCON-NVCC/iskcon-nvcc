@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from 'react'
 import QuestionCard from '../../../../components/QuestionCard'
+import { supabase } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
 
 const Icons = {
   Save: () => (
@@ -37,6 +39,44 @@ const CreateFormPage = () => {
   const [isQuiz, setIsQuiz] = useState(false)
   const [aiTopic, setAiTopic] = useState('')
   const [questions, setQuestions] = useState([])
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  const handleSave = async () => {
+    if (!title.trim()) {
+      alert('Please enter a form title')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      
+      if (authError || !user) {
+        throw new Error('You must be logged in to create a form')
+      }
+
+      const { error } = await supabase
+        .from('forms')
+        .insert({
+          title,
+          description,
+          is_quiz: isQuiz,
+          questions: questions,
+          user_id: user.id
+        })
+
+      if (error) throw error
+
+      alert('Form saved successfully!')
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Error saving form:', error)
+      alert('Failed to save form: ' + error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const addQuestion = (type) => {
     const newQuestion = {
@@ -68,9 +108,13 @@ const CreateFormPage = () => {
             <h1 className="text-2xl md:text-3xl font-serif font-bold text-stone-900">Create Form</h1>
             <p className="text-stone-500 mt-1 text-sm md:text-base">Build your form with custom questions</p>
           </div>
-          <button className="flex items-center justify-center gap-2 bg-[#EE7D22] hover:bg-[#d66e1d] text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm w-full md:w-auto">
+          <button 
+            onClick={handleSave}
+            disabled={loading}
+            className="flex items-center justify-center gap-2 bg-[#EE7D22] hover:bg-[#d66e1d] disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm w-full md:w-auto"
+          >
             <Icons.Save />
-            Save Form
+            {loading ? 'Saving...' : 'Save Form'}
           </button>
         </div>
 
