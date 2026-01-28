@@ -16,6 +16,7 @@ export default async function DashboardPage() {
 
   if (!user) {
     redirect("/login");
+    console.log("User not found");
   }
 
   // Fetch metrics
