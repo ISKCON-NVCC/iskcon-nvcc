@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import QuestionCard from '../../../../components/QuestionCard'
 import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 const Icons = {
   Save: () => (
@@ -44,7 +45,7 @@ const CreateFormPage = () => {
 
   const handleSave = async () => {
     if (!title.trim()) {
-      alert('Please enter a form title')
+      toast.error('Please enter a form title')
       return
     }
 
@@ -68,11 +69,11 @@ const CreateFormPage = () => {
 
       if (error) throw error
 
-      alert('Form saved successfully!')
+      toast.success('Form saved successfully!')
       router.push('/dashboard')
     } catch (error) {
       console.error('Error saving form:', error)
-      alert('Failed to save form: ' + error.message)
+      toast.error('Failed to save form: ' + error.message)
     } finally {
       setLoading(false)
     }
