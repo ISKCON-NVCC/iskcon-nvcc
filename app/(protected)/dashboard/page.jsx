@@ -4,6 +4,7 @@ import { LuUsers } from "react-icons/lu";
 import { CiSquareCheck } from "react-icons/ci";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 
@@ -14,7 +15,7 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return <div>Please log in to view dashboard.</div>;
+    redirect("/login");
   }
 
   // Fetch metrics
