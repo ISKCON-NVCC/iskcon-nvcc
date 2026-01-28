@@ -2,6 +2,7 @@
 "use client"
 import React, { useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import toast from 'react-hot-toast'
 
 const FormView = ({ form }) => {
   const [answers, setAnswers] = useState({})
@@ -63,10 +64,11 @@ const FormView = ({ form }) => {
 
       if (error) throw error
 
+      toast.success('Form submitted successfully!')
       setSubmitted(true)
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert('Failed to submit form. Please try again.')
+      toast.error('Failed to submit form. Please try again.')
     } finally {
       setLoading(false)
     }
