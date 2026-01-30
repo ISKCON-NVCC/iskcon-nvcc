@@ -2,6 +2,7 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -29,8 +30,14 @@ export default function SignupPage() {
         className="w-[440px] bg-white px-10 py-12 rounded-2xl shadow-[0_12px_30px_rgba(0,0,0,0.15)] flex flex-col items-center"
       >
         {/* Om icon */}
-        <div className="w-[60px] h-[60px] rounded-full bg-[#F5821F] flex items-center justify-center mb-[24px]">
-          <span className="text-white text-[32px] font-bold leading-none">ॐ</span>
+        <div className="w-[60px] h-[60px] rounded-full bg-[#F5821F] flex items-center justify-center mb-[24px] overflow-hidden p-2">
+          <Image 
+            src="/image.png" 
+            alt="Logo" 
+            width={60} 
+            height={60} 
+            className="object-contain w-full h-full"
+          />
         </div>
 
         {/* Title */}
