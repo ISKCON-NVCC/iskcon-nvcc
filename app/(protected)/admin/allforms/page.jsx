@@ -3,6 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
+import CopyButton from '@/components/CopyButton'
 
 const Icons = {
   Plus: () => (
@@ -132,9 +133,7 @@ const AllFormsPage = async () => {
                                 Responses
                             </button>
                         </Link>
-                        <button className="inline-flex justify-center items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-stone-600 hover:bg-stone-50 border border-stone-200 transition-colors" title="Copy Link">
-                            <Icons.Link />
-                        </button>
+                        <CopyButton formId={form.id} />
                     </div>
                 </div>
             ))}
