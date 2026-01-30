@@ -9,6 +9,7 @@ const FormView = ({ form }) => {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
+  const [score, setScore] = useState(null)
 
   const questions = form.questions || []
 
@@ -61,6 +62,16 @@ const FormView = ({ form }) => {
           form_id: form.id,
           answers: answers
         })
+        
+      if (form.is_quiz) {
+        let calculatedScore = 0
+        questions.forEach(q => {
+            if (q.type === 'multiple_choice' && q.correctAnswer === answers[q.id]) {
+                calculatedScore++
+            }
+        })
+        setScore(calculatedScore)
+      }
 
       if (error) throw error
 
@@ -83,6 +94,12 @@ const FormView = ({ form }) => {
                 </div>
                 <h2 className="text-2xl font-serif font-bold text-[#2C211A]">Thank You!</h2>
                 <p className="text-stone-600">Your response has been recorded.</p>
+                {score !== null && (
+                    <div className="bg-orange-50 rounded-lg p-4 mt-4 border border-orange-100">
+                        <p className="text-sm text-stone-600 uppercase tracking-wide font-semibold">Your Score</p>
+                        <p className="text-3xl font-bold text-[#EE7D22] mt-1">{score} / {questions.filter(q => q.type === 'multiple_choice').length}</p>
+                    </div>
+                )}
                 <button 
                   onClick={() => window.location.reload()}
                   className="text-[#EE7D22] hover:underline text-sm font-medium mt-4 block"

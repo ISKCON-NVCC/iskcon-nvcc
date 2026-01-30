@@ -38,7 +38,7 @@ const Icons = {
   )
 }
 
-const QuestionCard = ({ question, index, onUpdate, onDelete }) => {
+const QuestionCard = ({ question, index, onUpdate, onDelete, isQuiz }) => {
   
   const handleOptionChange = (optIndex, value) => {
     const newOptions = [...(question.options || [])];
@@ -126,6 +126,16 @@ const QuestionCard = ({ question, index, onUpdate, onDelete }) => {
           <div className="space-y-3 pt-2">
             {(question.options || []).map((option, i) => (
               <div key={i} className="flex items-center gap-3">
+                {isQuiz && (
+                  <input
+                    type="radio"
+                    name={`correct-answer-${question.id}`}
+                    checked={question.correctAnswer === option}
+                    onChange={() => onUpdate(question.id, { correctAnswer: option })}
+                    className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                    title="Mark as correct answer"
+                  />
+                )}
                 <span className="text-stone-500 font-medium min-w-[20px] text-right">{getOptionLabel(i)}.</span>
                 <div className="flex-1 relative">
                     <input 

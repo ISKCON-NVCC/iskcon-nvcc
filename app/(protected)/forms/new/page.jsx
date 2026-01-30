@@ -227,6 +227,7 @@ const CreateFormPage = () => {
                   index={index}
                   onUpdate={updateQuestion}
                   onDelete={deleteQuestion}
+                  isQuiz={isQuiz}
                 />
               ))}
             </div>
