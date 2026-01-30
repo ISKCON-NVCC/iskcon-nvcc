@@ -4,6 +4,7 @@ import QuestionCard from '../../../../components/QuestionCard'
 import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { generateQuestions } from '@/app/actions/generateQuestions'
 
 const Icons = {
   Save: () => (
@@ -41,6 +42,8 @@ const CreateFormPage = () => {
   const [aiTopic, setAiTopic] = useState('')
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(false)
+  const [generatedQuestions, setGeneratedQuestions] = useState([])
+  const [isGenerating, setIsGenerating] = useState(false)
   const router = useRouter()
 
   const handleSave = async () => {
@@ -97,6 +100,41 @@ const CreateFormPage = () => {
 
   const updateQuestion = (id, updates) => {
     setQuestions(questions.map(q => q.id === id ? { ...q, ...updates } : q))
+  }
+
+  const handleGenerate = async () => {
+    if (!aiTopic.trim()) {
+      toast.error('Please enter a topic')
+      return
+    }
+
+    setIsGenerating(true)
+    setGeneratedQuestions([])
+    try {
+      const result = await generateQuestions(aiTopic)
+      setGeneratedQuestions(result)
+      toast.success('Questions generated!')
+    } catch (error) {
+      console.error('Generation error:', error)
+      toast.error('Failed to generate questions')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  const addGeneratedQuestion = (q) => {
+    const newQuestion = {
+      id: Date.now().toString(),
+      type: 'multiple_choice',
+      label: q.label,
+      required: false,
+      options: q.options,
+      correctAnswer: q.correctAnswer // Optional: store correct answer if your schema supports it
+    }
+    setQuestions(prev => [...prev, newQuestion])
+    // Optional: Remove from generated list after adding
+    setGeneratedQuestions(prev => prev.filter(item => item !== q))
+    toast.success('Question added!')
   }
 
   return (
@@ -179,11 +217,44 @@ const CreateFormPage = () => {
               value={aiTopic}
               onChange={(e) => setAiTopic(e.target.value)}
               className="w-full md:flex-1 px-4 py-3 bg-white border border-[#FCDCC3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#EE7D22]/20 focus:border-[#EE7D22] placeholder:text-[#BCAAA0]"
+              onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
             />
-            <button className="bg-[#EE7D22] hover:bg-[#d66e1d] text-white px-6 py-3 md:py-2 rounded-lg font-medium transition-colors shadow-sm w-full md:w-auto">
-              Generate
+            <button 
+              onClick={handleGenerate}
+              disabled={isGenerating}
+              className="bg-[#EE7D22] hover:bg-[#d66e1d] disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 md:py-2 rounded-lg font-medium transition-colors shadow-sm w-full md:w-auto min-w-[120px]"
+            >
+              {isGenerating ? 'Generating...' : 'Generate'}
             </button>
           </div>
+
+          {generatedQuestions.length > 0 && (
+            <div className="mt-6 space-y-3">
+              <h3 className="font-medium text-[#3F2E23]">Generated Suggestions:</h3>
+              <div className="grid gap-3">
+                {generatedQuestions.map((q, idx) => (
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-[#FCDCC3] flex justify-between items-start gap-4">
+                    <div className="flex-1">
+                      <p className="font-medium text-stone-800 mb-2">{q.label}</p>
+                      <div className="pl-4 border-l-2 border-stone-200">
+                        {q.options.map((opt, i) => (
+                          <div key={i} className={`text-sm ${opt === q.correctAnswer ? 'text-green-600 font-medium' : 'text-stone-500'}`}>
+                            • {opt} {opt === q.correctAnswer && '(Correct)'}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => addGeneratedQuestion(q)}
+                      className="text-[#EE7D22] hover:text-[#d66e1d] font-medium text-sm whitespace-nowrap"
+                    >
+                      + Add
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Questions Card */}
