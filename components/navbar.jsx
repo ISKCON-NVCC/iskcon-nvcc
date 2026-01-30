@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -32,8 +33,14 @@ export default function Navbar() {
       <div className="px-6 py-3 flex items-center justify-between">
         {/* Logo / Brand */}
         <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-[#F58220] flex items-center justify-center text-white font-bold">
-            ॐ
+          <div className="h-9 w-9 rounded-full bg-[#f19d54] flex items-center justify-center text-white font-bold overflow-hidden p-1">
+            <Image 
+              src="/image.png" 
+              alt="Logo" 
+              width={36} 
+              height={36} 
+              className="object-contain w-full h-full"
+            />
           </div>
           <span className="font-semibold text-lg text-[#4A2E1F]">ISKCON NVCC</span>
         </Link>
